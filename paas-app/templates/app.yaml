@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}-app
+spec:
+  replicas: {{ .Values.app.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}-app
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}-app
+    spec:
+      containers:
+      - name: app
+        image: {{ .Values.app.image }}
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: {{ .Values.app.port }}
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        env:
+        {{- range $k, $v := .Values.app.env }}
+        - name: {{ $k }}
+          value: {{ $v | quote }}
+        {{- end }}
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: {{ .Values.db.passwordKey }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.name }}-app
+spec:
+  selector:
+    app: {{ .Values.name }}-app
+  ports:
+  - port: 80
+    targetPort: {{ .Values.app.port }}
