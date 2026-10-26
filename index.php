@@ -33,7 +33,7 @@ $items = $pdo->query("SELECT * FROM items ORDER BY id DESC")->fetchAll(PDO::FETC
 <html lang="es"><head><meta charset="utf-8"><title>CRUD PHP + MySQL</title>
 <style>body{font-family:sans-serif;max-width:700px;margin:30px auto}table{width:100%;border-collapse:collapse}td,th{border:1px solid #ccc;padding:6px}input{padding:6px;margin:3px}</style></head>
 <body>
-<h1>App A - PHP + MySQL (paas-uno)</h1>
+<h1>App A - PHP + MySQL (paas-uno) v2 auto-deploy</h1>
 <form method="post">
   <input type="hidden" name="accion" value="<?= $editar ? 'actualizar' : 'crear' ?>">
   <?php if ($editar): ?><input type="hidden" name="id" value="<?= $editar['id'] ?>"><?php endif; ?>
