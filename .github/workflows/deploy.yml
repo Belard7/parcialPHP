@@ -1,0 +1,16 @@
+name: deploy-php
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - name: Construir imagen en Minikube
+        run: |
+          eval $(minikube docker-env)
+          docker build -t php-crud:${{ github.sha }} .
+      - name: Desplegar con Helm
+        run: |
+          helm upgrade --install php ./paas-app -n paas-uno -f values-php.yaml --set app.image=php-crud:${{ github.sha }}
